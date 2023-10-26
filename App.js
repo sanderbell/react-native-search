@@ -9,6 +9,7 @@ import {
   FlatList,
   Alert,
 } from 'react-native';
+import { Table, Row } from 'react-native-table-component';
 import data from './data.json';
 
 const App = () => {
@@ -22,17 +23,22 @@ const App = () => {
       (user) => user.name.toLowerCase() === username.toLowerCase()
     );
 
+    if (username.length === 0) {
+      Alert.alert('🤔 🤔 🤔', 'Cannot be empty');
+      setUsers([]);
+      return;
+    }
+
     if (!searchedUser) {
       Alert.alert(
-        'Error',
-        'No such user! Please enter first name and last name!'
+        '🙊 🙊 🙊',
+        'No such user. Enter their first name and last name!'
       );
       setUsers([]);
       return;
     }
 
     const allUsers = usersArray.sort((a, b) => b.bananas - a.bananas);
-
     const userRank =
       allUsers.findIndex((user) => user.uid === searchedUser.uid) + 1;
 
@@ -46,7 +52,6 @@ const App = () => {
         rank: index + 1,
         isSearchedUser: user.uid === searchedUser.uid,
       }));
-
       setUsers(updatedTop10Users);
     } else {
       const updatedTop10Users = [
@@ -60,9 +65,9 @@ const App = () => {
 
       setUsers(updatedTop10Users);
     }
-
-
   };
+
+  const tableHead = ['Rank', 'Name', 'Bananas', 'Is Searched User'];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -75,26 +80,23 @@ const App = () => {
         <Button title='Search' onPress={handleSearch} />
       </View>
 
-        <FlatList
-          style={styles.list}
-          data={users}
-          renderItem={({ item }) => (
-            <View style={styles.userContainer}>
-              <Text
-                style={
-                  item.isSearchedUser
-                    ? { color: 'red', fontWeight: 'bold' }
-                    : ''
-                }
-              >
-                {item.rank}. {item.name}: {item.bananas} banana
-                {item.bananas > 1 ? 's' : ''}
-              </Text>
-            </View>
-          )}
-          keyExtractor={(item) => item.uid}
-        />
-    
+      <Table
+        borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff', marginLeft: 10 }}
+      >
+        <Row data={tableHead} style={styles.head} textStyle={styles.text} />
+        {users.map((item, index) => (
+          <Row
+            key={index}
+            data={[
+              item.rank.toString(),
+              `${item.name}`,
+              `${item.bananas}`,
+              `${item.isSearchedUser ? 'true' : 'false'}`,
+            ]}
+            textStyle={styles.text}
+          />
+        ))}
+      </Table>
     </SafeAreaView>
   );
 };
@@ -103,12 +105,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    padding: 16,
   },
   searchContainer: {
-    alignSelf: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
-    alignContent: 'center',
     marginBottom: 10,
   },
   input: {
@@ -118,16 +119,8 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
   },
-  list: {
-    alignSelf: 'center',
-    flex: 1,
-    alignContent: 'center',
-  },
-  errorText: {
-    alignSelf: 'center',
-    color: 'red',
-    marginBottom: 10,
-  },
+  head: { height: 50, backgroundColor: '#f1f8ff', textAlign: 'center' },
+  text: { margin: 4, textAlign: 'center' },
 });
 
 export default App;
