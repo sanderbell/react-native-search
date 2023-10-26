@@ -14,31 +14,33 @@ import data from './data.json';
 const App = () => {
   const [username, setUsername] = useState('');
   const [users, setUsers] = useState([]);
-  const [error, setError] = useState('');
 
   const handleSearch = () => {
     const usersArray = Object.values(data);
 
-    // Find the searched user
     const searchedUser = usersArray.find(
       (user) => user.name.toLowerCase() === username.toLowerCase()
     );
 
     if (!searchedUser) {
-      // User not found, show error message
-      setError(
-        'This user name does not exist! Please specify an existing first name and last name!'
+      Alert.alert(
+        'Error',
+        'No such user! Please enter first name and last name!'
       );
       setUsers([]);
       return;
     }
+
+    const allUsers = usersArray.sort((a, b) => b.bananas - a.bananas);
+
+    const userRank =
+      allUsers.findIndex((user) => user.uid === searchedUser.uid) + 1;
 
     const top10Users = usersArray
       .sort((a, b) => b.bananas - a.bananas)
       .slice(0, 10);
 
     if (searchedUser.bananas >= top10Users[9].bananas) {
-      // Searched user has enough bananas to be in the top 10
       const updatedTop10Users = top10Users.map((user, index) => ({
         ...user,
         rank: index + 1,
@@ -47,17 +49,19 @@ const App = () => {
 
       setUsers(updatedTop10Users);
     } else {
-      // Searched user doesn't have enough bananas
-      // Replace the searched user with the last rank of the top 10
       const updatedTop10Users = [
-        ...top10Users.slice(0, 9),
-        { ...searchedUser, rank: top10Users.length + 1, isSearchedUser: true },
+        ...top10Users.slice(0, 9).map((user, index) => ({
+          ...user,
+          rank: index + 1,
+          isSearchedUser: user.uid === searchedUser.uid,
+        })),
+        { ...searchedUser, rank: userRank, isSearchedUser: true },
       ];
 
       setUsers(updatedTop10Users);
     }
 
-    setError('');
+
   };
 
   return (
@@ -70,9 +74,7 @@ const App = () => {
         />
         <Button title='Search' onPress={handleSearch} />
       </View>
-      {error ? (
-        <Text style={styles.errorText}>{error}</Text>
-      ) : (
+
         <FlatList
           style={styles.list}
           data={users}
@@ -92,7 +94,7 @@ const App = () => {
           )}
           keyExtractor={(item) => item.uid}
         />
-      )}
+    
     </SafeAreaView>
   );
 };
