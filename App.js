@@ -1,20 +1,52 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  TextInput,
+  Button,
+  SafeAreaView,
+  Text,
+  StyleSheet,
+  Alert,
+} from 'react-native';
 
-export default function App() {
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.searchConrainer}>
+        <TextInput
+          style={styles.input}
+          placeholder='Enter your username'
+          // onChangeText={text => setUserName(text)}
+          // value={userName}
+        />
+        <Button title='Search' />
+      </View>
+    </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    flexDirection: 'row',
     justifyContent: 'center',
+    alignContent: 'center',
+  },
+  searchConrainer: {
+    alignSelf: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignContent: 'center',
+    
+  },
+  input: {
+    height: 40,
+    width: 200,
+    padding: 5,
+    borderColor: 'gray',
+    borderWidth: 1,
   },
 });
+
+export default App;
