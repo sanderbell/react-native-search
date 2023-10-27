@@ -4,20 +4,38 @@ import {
   TextInput,
   Button,
   SafeAreaView,
-  Text,
   StyleSheet,
-  FlatList,
   Alert,
 } from 'react-native';
 import { Table, Row } from 'react-native-table-component';
+import PropTypes from 'prop-types';
 import data from './data.json';
+
+const userData = {
+  bananas: PropTypes.number.isRequired,
+  lastDayPlayed: PropTypes.string,
+  longestStreak: PropTypes.number,
+  name: PropTypes.string.isRequired,
+  stars: PropTypes.number,
+  subscribed: PropTypes.bool,
+  uid: PropTypes.string.isRequired,
+};
+
+function validateData(data) {
+  Object.values(data).forEach((user) => {
+    PropTypes.checkPropTypes(userData, user, 'property', 'data.json');
+  });
+  return data;
+}
+
+const validatedData = validateData(data);
 
 const App = () => {
   const [username, setUsername] = useState('');
   const [users, setUsers] = useState([]);
 
   const handleSearch = () => {
-    const usersArray = Object.values(data);
+    const usersArray = Object.values(validatedData);
 
     const searchedUser = usersArray.find(
       (user) => user.name.toLowerCase() === username.toLowerCase()
@@ -79,24 +97,27 @@ const App = () => {
         />
         <Button title='Search' onPress={handleSearch} />
       </View>
-
-      <Table
-        borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff', marginLeft: 10 }}
-      >
-        <Row data={tableHead} style={styles.head} textStyle={styles.text} />
-        {users.map((item, index) => (
+      {true ? (
+        <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
           <Row
-            key={index}
-            data={[
-              item.rank.toString(),
-              `${item.name}`,
-              `${item.bananas}`,
-              `${item.isSearchedUser ? 'true' : 'false'}`,
-            ]}
-            textStyle={styles.text}
+            data={tableHead}
+            style={styles.head}
+            textStyle={{ ...styles.text }}
           />
-        ))}
-      </Table>
+          {users.map((item, index) => (
+            <Row
+              key={index}
+              data={[
+                item.rank.toString(),
+                `${item.name}`,
+                `${item.bananas}`,
+                `${item.isSearchedUser ? 'true' : 'false'}`,
+              ]}
+              textStyle={{ ...styles.text }}
+            />
+          ))}
+        </Table>
+      ) : null}
     </SafeAreaView>
   );
 };
