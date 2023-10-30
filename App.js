@@ -1,15 +1,36 @@
 import React, { useState } from 'react';
+import { Alert, SafeAreaView, View, StyleSheet } from 'react-native';
 import {
-  View,
-  TextInput,
+  Provider as PaperProvider,
+  DataTable,
   Button,
-  SafeAreaView,
-  StyleSheet,
-  Alert,
-} from 'react-native';
-import { Table, Row } from 'react-native-table-component';
+  Searchbar,
+} from 'react-native-paper';
 import PropTypes from 'prop-types';
 import data from './data.json';
+
+const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 2,
+  },
+  tableCell: {
+    padding: 2,
+  },
+  searchBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 50,
+  },
+  searchBar: {
+    width: '60%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 30,
+  },
+});
 
 const userData = {
   bananas: PropTypes.number.isRequired,
@@ -85,63 +106,42 @@ const App = () => {
     }
   };
 
-  const tableHead = ['Rank', 'Name', 'Bananas', 'Is Searched User'];
-
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder='Enter your username'
-          onChangeText={(text) => setUsername(text)}
-        />
-        <Button title='Search' onPress={handleSearch} />
-      </View>
-      {true ? (
-        <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
-          <Row
-            data={tableHead}
-            style={styles.head}
-            textStyle={{ ...styles.text }}
+    <PaperProvider>
+      <SafeAreaView style={styles.centered}>
+        <View style={styles.searchBox}>
+          <Searchbar
+            style={styles.searchBar}
+            placeholder='Search'
+            onChangeText={setUsername}
+            value={username}
           />
-          {users.map((item, index) => (
-            <Row
-              key={index}
-              data={[
-                item.rank.toString(),
-                `${item.name}`,
-                `${item.bananas}`,
-                `${item.isSearchedUser ? 'true' : 'false'}`,
-              ]}
-              textStyle={{ ...styles.text }}
-            />
+          <Button mode='contained' onPress={handleSearch}>
+            Find
+          </Button>
+        </View>
+        <DataTable>
+          <DataTable.Header>
+            <DataTable.Title>Rank</DataTable.Title>
+            <DataTable.Title>Name</DataTable.Title>
+            <DataTable.Title numeric>Bananas</DataTable.Title>
+            <DataTable.Title numeric>Is Searched</DataTable.Title>
+          </DataTable.Header>
+
+          {users.map((user) => (
+            <DataTable.Row key={user.uid}>
+              <DataTable.Cell>{user.rank}</DataTable.Cell>
+              <DataTable.Cell>{user.name}</DataTable.Cell>
+              <DataTable.Cell numeric>{user.bananas}</DataTable.Cell>
+              <DataTable.Cell numeric>
+                {user.isSearchedUser ? 'Yes' : 'No'}
+              </DataTable.Cell>
+            </DataTable.Row>
           ))}
-        </Table>
-      ) : null}
-    </SafeAreaView>
+        </DataTable>
+      </SafeAreaView>
+    </PaperProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 16,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: 10,
-  },
-  input: {
-    height: 40,
-    width: 200,
-    padding: 5,
-    borderColor: 'gray',
-    borderWidth: 1,
-  },
-  head: { height: 50, backgroundColor: '#f1f8ff', textAlign: 'center' },
-  text: { margin: 4, textAlign: 'center' },
-});
 
 export default App;
