@@ -1,12 +1,5 @@
 import React, { useState, useRef } from 'react';
-import {
-  Alert,
-  SafeAreaView,
-  View,
-  StyleSheet,
-  Keyboard,
-  Animated,
-} from 'react-native';
+import { Alert, SafeAreaView, View, StyleSheet, Keyboard } from 'react-native';
 import {
   Provider as PaperProvider,
   DataTable,
@@ -71,66 +64,70 @@ const App = () => {
   const [users, setUsers] = useState([]);
   const searchDone = useRef(false);
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-
-  React.useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 2000,
-      useNativeDriver: true,
-    }).start();
-  }, [fadeAnim]);
-
-  const handleSearch = () => {
+  const handleSearch = async () => {
     const usersArray = Object.values(validatedData);
-
-    const searchedUser = usersArray.find(
+    let searchedUser;
+    const matchingUsers = usersArray.filter(
       (user) => user.name.toLowerCase() === username.toLowerCase().trim()
     );
-
     if (username.length === 0) {
       Alert.alert('🙈 Cannot be empty', 'Please enter something');
       setUsers([]);
       searchDone.current = false;
-
       return;
     }
-
-    if (!searchedUser) {
+    if (matchingUsers.length === 0) {
       Alert.alert('🙊 No such user', 'Enter their first and last name');
       setUsers([]);
       searchDone.current = false;
       return;
     }
+    if (matchingUsers.length > 1) {
+      searchedUser = await new Promise((resolve) => {
+        Alert.alert(
+          `There are ${matchingUsers.length} users with this name`,
+          'Choose the one from the list:',
+          matchingUsers.map((user, index) => ({
+            text: `${user.name} (${user.stars} stars)`,
+            onPress: () => resolve(matchingUsers[index]),
+          }))
+        );
+      });
+    } else {
+      searchedUser = matchingUsers[0];
+    }
 
     const allUsers = usersArray.sort((a, b) => b.bananas - a.bananas);
-    const userRank =
-      allUsers.findIndex((user) => user.uid === searchedUser.uid) + 1;
 
-    const top10Users = usersArray
-      .sort((a, b) => b.bananas - a.bananas)
-      .slice(0, 10);
+    if (searchedUser) {
+      const userRank =
+        allUsers.findIndex((user) => user.uid === searchedUser.uid) + 1;
 
-    if (searchedUser.bananas >= top10Users[9].bananas) {
-      const updatedTop10Users = top10Users.map((user, index) => ({
-        ...user,
-        rank: index + 1,
-        isSearchedUser: user.uid === searchedUser.uid,
-      }));
-      setUsers(updatedTop10Users);
-    } else {
-      const updatedTop10Users = [
-        ...top10Users.slice(0, 9).map((user, index) => ({
+      const top10Users = usersArray
+        .sort((a, b) => b.bananas - a.bananas)
+        .slice(0, 10);
+
+      if (searchedUser.bananas >= top10Users[9].bananas) {
+        const updatedTop10Users = top10Users.map((user, index) => ({
           ...user,
           rank: index + 1,
           isSearchedUser: user.uid === searchedUser.uid,
-        })),
-        { ...searchedUser, rank: userRank, isSearchedUser: true },
-      ];
-      setUsers(updatedTop10Users);
+        }));
+        setUsers(updatedTop10Users);
+      } else {
+        const updatedTop10Users = [
+          ...top10Users.slice(0, 9).map((user, index) => ({
+            ...user,
+            rank: index + 1,
+            isSearchedUser: user.uid === searchedUser.uid,
+          })),
+          { ...searchedUser, rank: userRank, isSearchedUser: true },
+        ];
+        setUsers(updatedTop10Users);
+      }
+      searchDone.current = true;
+      Keyboard.dismiss();
     }
-    searchDone.current = true;
-    Keyboard.dismiss();
   };
 
   return (
@@ -202,3 +199,12 @@ const App = () => {
 };
 
 export default App;
+
+//TODO: 2 users with the same name
+//TODO: Sync styles
+//TODO: Unit tests
+//TODO: Error handling
+//TODO: Animate styles
+//TODO: Refactor
+//TODO: Annotate
+//TODO: README
