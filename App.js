@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Alert, SafeAreaView, View, StyleSheet } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { Alert, SafeAreaView, View, StyleSheet, Keyboard } from 'react-native';
 import {
   Provider as PaperProvider,
   DataTable,
@@ -14,18 +14,29 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 2,
+    margin: 20,
   },
   searchBox: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 50,
+    justifyContent: 'center',
   },
+
   searchBar: {
-    width: '60%',
+    flex: 0.7,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 30,
+    marginRight: 15,
+    borderRadius: '20%',
+  },
+
+  button: {
+    height: 'auto',
+    flex: 0.3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: '20%',
   },
 });
 
@@ -51,6 +62,7 @@ const validatedData = validateData(data);
 const App = () => {
   const [username, setUsername] = useState('');
   const [users, setUsers] = useState([]);
+  const searchDone = useRef(false);
 
   const handleSearch = () => {
     const usersArray = Object.values(validatedData);
@@ -58,10 +70,11 @@ const App = () => {
     const searchedUser = usersArray.find(
       (user) => user.name.toLowerCase() === username.toLowerCase()
     );
-
     if (username.length === 0) {
       Alert.alert('🤔 🤔 🤔', 'Cannot be empty');
       setUsers([]);
+      searchDone.current = false;
+
       return;
     }
 
@@ -71,6 +84,7 @@ const App = () => {
         'No such user. Enter their first name and last name!'
       );
       setUsers([]);
+      searchDone.current = false;
       return;
     }
 
@@ -98,71 +112,74 @@ const App = () => {
         })),
         { ...searchedUser, rank: userRank, isSearchedUser: true },
       ];
-
       setUsers(updatedTop10Users);
     }
+    searchDone.current = true;
+    Keyboard.dismiss();
   };
-
-  const centeredContentStyle = { justifyContent: 'center' };
 
   return (
     <PaperProvider>
       <SafeAreaView style={styles.centered}>
         <View style={styles.searchBox}>
           <Searchbar
+            autoFocus
             style={styles.searchBar}
             placeholder='Search'
             onChangeText={setUsername}
             value={username}
           />
-          <Button mode='contained' onPress={handleSearch}>
+          <Button style={styles.button} mode='contained' onPress={handleSearch}>
             Find
           </Button>
         </View>
-        <DataTable>
-          <DataTable.Header>
-            <DataTable.Title style={{ justifyContent: 'center', flex: 0.3 }}>
-              Rank
-            </DataTable.Title>
-            <DataTable.Title style={{ justifyContent: 'center', flex: 1.5 }}>
-              Name
-            </DataTable.Title>
-            <DataTable.Title style={{ justifyContent: 'center' }}>
-              Bananas
-            </DataTable.Title>
-            <DataTable.Title style={{ justifyContent: 'center' }}>
-              Is Searched User
-            </DataTable.Title>
-          </DataTable.Header>
+        {searchDone.current ? (
+          <DataTable>
+            <DataTable.Header>
+              <DataTable.Title style={{ justifyContent: 'center', flex: 0.3 }}>
+                Rank
+              </DataTable.Title>
+              <DataTable.Title style={{ justifyContent: 'center', flex: 1.5 }}>
+                Name
+              </DataTable.Title>
+              <DataTable.Title style={{ justifyContent: 'center' }}>
+                Bananas
+              </DataTable.Title>
+              <DataTable.Title style={{ justifyContent: 'center' }}>
+                Is Searched User
+              </DataTable.Title>
+            </DataTable.Header>
 
-          {users.map((user) => (
-            <DataTable.Row
-              style={{
-                backgroundColor: user.isSearchedUser
-                  ? '#ede7f3'
-                  : 'transparent',
-              }}
-              key={user.uid}
-            >
-              <DataTable.Cell style={{ justifyContent: 'center', flex: 0.3 }}>
-                {user.rank}
-              </DataTable.Cell>
-              <DataTable.Cell style={{ justifyContent: 'center', flex: 1.5 }}>
-                {user.name}
-              </DataTable.Cell>
-              <DataTable.Cell style={{ justifyContent: 'center' }}>
-                {user.bananas}
-              </DataTable.Cell>
-              <DataTable.Cell
+            {users.map((user) => (
+              <DataTable.Row
                 style={{
-                  justifyContent: 'center',
+                  borderRadius: '15%',
+                  backgroundColor: user.isSearchedUser
+                    ? '#ede7f3'
+                    : 'transparent',
                 }}
+                key={user.uid}
               >
-                {user.isSearchedUser ? 'Yes' : 'No'}
-              </DataTable.Cell>
-            </DataTable.Row>
-          ))}
-        </DataTable>
+                <DataTable.Cell style={{ justifyContent: 'center', flex: 0.3 }}>
+                  {user.rank}
+                </DataTable.Cell>
+                <DataTable.Cell style={{ justifyContent: 'center', flex: 1.5 }}>
+                  {user.name}
+                </DataTable.Cell>
+                <DataTable.Cell style={{ justifyContent: 'center' }}>
+                  {user.bananas}
+                </DataTable.Cell>
+                <DataTable.Cell
+                  style={{
+                    justifyContent: 'center',
+                  }}
+                >
+                  {user.isSearchedUser ? 'Yes' : 'No'}
+                </DataTable.Cell>
+              </DataTable.Row>
+            ))}
+          </DataTable>
+        ) : null}
       </SafeAreaView>
     </PaperProvider>
   );
