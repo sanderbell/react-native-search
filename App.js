@@ -1,5 +1,12 @@
 import React, { useState, useRef } from 'react';
-import { Alert, SafeAreaView, View, StyleSheet, Keyboard } from 'react-native';
+import {
+  Alert,
+  SafeAreaView,
+  View,
+  StyleSheet,
+  Keyboard,
+  Animated,
+} from 'react-native';
 import {
   Provider as PaperProvider,
   DataTable,
@@ -14,7 +21,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 20,
+    margin: 17,
   },
   searchBox: {
     flexDirection: 'row',
@@ -24,10 +31,10 @@ const styles = StyleSheet.create({
   },
 
   searchBar: {
-    flex: 0.7,
+    flex: 0.75,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 15,
+    marginRight: 10,
     borderRadius: '20%',
   },
 
@@ -64,12 +71,23 @@ const App = () => {
   const [users, setUsers] = useState([]);
   const searchDone = useRef(false);
 
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  React.useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 2000,
+      useNativeDriver: true,
+    }).start();
+  }, [fadeAnim]);
+
   const handleSearch = () => {
     const usersArray = Object.values(validatedData);
 
     const searchedUser = usersArray.find(
-      (user) => user.name.toLowerCase() === username.toLowerCase()
+      (user) => user.name.toLowerCase() === username.toLowerCase().trim()
     );
+
     if (username.length === 0) {
       Alert.alert('🙈 Cannot be empty', 'Please enter something');
       setUsers([]);
@@ -132,18 +150,18 @@ const App = () => {
         </View>
         {searchDone.current ? (
           <DataTable>
-            <DataTable.Header>
-              <DataTable.Title style={{ justifyContent: 'center', flex: 0.3 }}>
+            <DataTable.Header style={{ marginBottom: 15 }}>
+              <DataTable.Title style={{ justifyContent: 'center', flex: 0.4 }}>
                 Rank
               </DataTable.Title>
               <DataTable.Title style={{ justifyContent: 'center', flex: 1.5 }}>
                 Name
               </DataTable.Title>
-              <DataTable.Title style={{ justifyContent: 'center' }}>
+              <DataTable.Title style={{ justifyContent: 'center', flex: 1 }}>
                 Bananas
               </DataTable.Title>
-              <DataTable.Title style={{ justifyContent: 'center' }}>
-                Is Searched User
+              <DataTable.Title style={{ justifyContent: 'center', flex: 1 }}>
+                Is Searched?
               </DataTable.Title>
             </DataTable.Header>
 
@@ -157,18 +175,19 @@ const App = () => {
                 }}
                 key={user.uid}
               >
-                <DataTable.Cell style={{ justifyContent: 'center', flex: 0.3 }}>
-                {user.bananas === 0 ? '∞' : user.rank}
+                <DataTable.Cell style={{ justifyContent: 'center', flex: 0.4 }}>
+                  {user.bananas === 0 ? '∞' : user.rank}
                 </DataTable.Cell>
                 <DataTable.Cell style={{ justifyContent: 'center', flex: 1.5 }}>
                   {user.name}
                 </DataTable.Cell>
-                <DataTable.Cell style={{ justifyContent: 'center' }}>
+                <DataTable.Cell style={{ justifyContent: 'center', flex: 1 }}>
                   {user.bananas}
                 </DataTable.Cell>
                 <DataTable.Cell
                   style={{
                     justifyContent: 'center',
+                    flex: 1,
                   }}
                 >
                   {user.isSearchedUser ? 'Yes' : 'No'}
