@@ -16,9 +16,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 2,
   },
-  tableCell: {
-    padding: 2,
-  },
   searchBox: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -106,6 +103,8 @@ const App = () => {
     }
   };
 
+  const centeredContentStyle = { justifyContent: 'center' };
+
   return (
     <PaperProvider>
       <SafeAreaView style={styles.centered}>
@@ -122,18 +121,43 @@ const App = () => {
         </View>
         <DataTable>
           <DataTable.Header>
-            <DataTable.Title>Rank</DataTable.Title>
-            <DataTable.Title>Name</DataTable.Title>
-            <DataTable.Title numeric>Bananas</DataTable.Title>
-            <DataTable.Title numeric>Is Searched</DataTable.Title>
+            <DataTable.Title style={{ justifyContent: 'center', flex: 0.3 }}>
+              Rank
+            </DataTable.Title>
+            <DataTable.Title style={{ justifyContent: 'center', flex: 1.5 }}>
+              Name
+            </DataTable.Title>
+            <DataTable.Title style={{ justifyContent: 'center' }}>
+              Bananas
+            </DataTable.Title>
+            <DataTable.Title style={{ justifyContent: 'center' }}>
+              Is Searched User
+            </DataTable.Title>
           </DataTable.Header>
 
           {users.map((user) => (
-            <DataTable.Row key={user.uid}>
-              <DataTable.Cell>{user.rank}</DataTable.Cell>
-              <DataTable.Cell>{user.name}</DataTable.Cell>
-              <DataTable.Cell numeric>{user.bananas}</DataTable.Cell>
-              <DataTable.Cell numeric>
+            <DataTable.Row
+              style={{
+                backgroundColor: user.isSearchedUser
+                  ? '#ede7f3'
+                  : 'transparent',
+              }}
+              key={user.uid}
+            >
+              <DataTable.Cell style={{ justifyContent: 'center', flex: 0.3 }}>
+                {user.rank}
+              </DataTable.Cell>
+              <DataTable.Cell style={{ justifyContent: 'center', flex: 1.5 }}>
+                {user.name}
+              </DataTable.Cell>
+              <DataTable.Cell style={{ justifyContent: 'center' }}>
+                {user.bananas}
+              </DataTable.Cell>
+              <DataTable.Cell
+                style={{
+                  justifyContent: 'center',
+                }}
+              >
                 {user.isSearchedUser ? 'Yes' : 'No'}
               </DataTable.Cell>
             </DataTable.Row>
