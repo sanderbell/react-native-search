@@ -71,7 +71,7 @@ const App = () => {
       (user) => user.name.toLowerCase() === username.toLowerCase()
     );
     if (username.length === 0) {
-      Alert.alert('🤔 🤔 🤔', 'Cannot be empty');
+      Alert.alert('🙈 Cannot be empty', 'Please enter something');
       setUsers([]);
       searchDone.current = false;
 
@@ -79,10 +79,7 @@ const App = () => {
     }
 
     if (!searchedUser) {
-      Alert.alert(
-        '🙊 🙊 🙊',
-        'No such user. Enter their first name and last name!'
-      );
+      Alert.alert('🙊 No such user', 'Enter their first and last name');
       setUsers([]);
       searchDone.current = false;
       return;
@@ -161,7 +158,7 @@ const App = () => {
                 key={user.uid}
               >
                 <DataTable.Cell style={{ justifyContent: 'center', flex: 0.3 }}>
-                  {user.rank}
+                {user.bananas === 0 ? '∞' : user.rank}
                 </DataTable.Cell>
                 <DataTable.Cell style={{ justifyContent: 'center', flex: 1.5 }}>
                   {user.name}
