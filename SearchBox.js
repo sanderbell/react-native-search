@@ -13,7 +13,12 @@ function SearchBox({ username, setUsername, handleSearch }) {
         onChangeText={setUsername}
         value={username}
       />
-      <Button style={styles.button} mode='contained' onPress={handleSearch}>
+      <Button
+        disabled={username.length === 0}
+        style={styles.button}
+        mode='contained'
+        onPress={handleSearch}
+      >
         Search
       </Button>
     </View>

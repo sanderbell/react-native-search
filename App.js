@@ -17,12 +17,13 @@ const App = () => {
       const matchingUsers = usersArray.filter(
         (user) => user.name.toLowerCase() === username.toLowerCase().trim()
       );
-      if (username.length === 0) {
-        Alert.alert('🙈 Cannot be empty', 'Please enter something');
-        setUsers([]);
-        searchDone.current = false;
-        return;
-      }
+      // This can be implemented if we prefer it over the disabled state of the button:
+      // if (username.length === 0) {
+      //   Alert.alert('🙈 Cannot be empty', 'Please enter something');
+      //   setUsers([]);
+      //   searchDone.current = false;
+      //   return;
+      // }
       if (matchingUsers.length === 0) {
         Alert.alert('🙊 No such user', 'Enter their first and last name');
         setUsers([]);
@@ -36,7 +37,7 @@ const App = () => {
         searchedUser = await new Promise((resolve) => {
           Alert.alert(
             `There are ${matchingUsers.length} users with this name`,
-            'Choose the one from the list:',
+            'Choose from the list:',
             matchingUsers.map((user, index) => ({
               text: `${user.name} (${user.stars} stars)`,
               onPress: () => resolve(matchingUsers[index]),
@@ -50,10 +51,7 @@ const App = () => {
       if (searchedUser) {
         const userRank =
           allUsers.findIndex((user) => user.uid === searchedUser.uid) + 1;
-
-        const top10Users = usersArray
-          .sort((a, b) => b.bananas - a.bananas)
-          .slice(0, 10);
+        const top10Users = allUsers.slice(0, 10);
 
         if (searchedUser.bananas >= top10Users[9].bananas) {
           const updatedTop10Users = top10Users.map((user, index) => ({
@@ -102,8 +100,6 @@ const App = () => {
 
 export default App;
 
-//TODO: Refactor and modules
 //TODO: Unit tests
-//TODO: Sync styles
 //TODO: Annotate
 //TODO: README
