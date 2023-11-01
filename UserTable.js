@@ -1,6 +1,7 @@
 import { DataTable } from 'react-native-paper';
+import styles from './styles';
 
-function UserTable({ users, isSearchDone, styles }) {
+function UserTable({ users, isSearchDone }) {
   return isSearchDone ? (
     <DataTable>
       <DataTable.Header style={styles.tableHeader}>

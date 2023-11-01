@@ -1,9 +1,23 @@
+import React from 'react';
 import { View } from 'react-native';
 import { Button, Searchbar } from 'react-native-paper';
-import React, { useState } from 'react';
+import styles from './styles';
 
-function SearchBox({ styles, handleSearch }) {
-  return <></>;
+function SearchBox({ username, setUsername, handleSearch }) {
+  return (
+    <View style={styles.searchBox}>
+      <Searchbar
+        autoFocus
+        style={styles.searchBar}
+        placeholder='Enter first and last name'
+        onChangeText={setUsername}
+        value={username}
+      />
+      <Button style={styles.button} mode='contained' onPress={handleSearch}>
+        Search
+      </Button>
+    </View>
+  );
 }
 
 export default SearchBox;

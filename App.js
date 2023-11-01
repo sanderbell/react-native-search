@@ -1,80 +1,19 @@
 import React, { useState, useRef } from 'react';
-import { View, Alert, SafeAreaView, StyleSheet, Keyboard } from 'react-native';
-import {
-  Provider as PaperProvider,
-  Button,
-  Searchbar,
-} from 'react-native-paper';
-import PropTypes from 'prop-types';
-import data from './data.json';
+import { Alert, SafeAreaView, Keyboard } from 'react-native';
+import { Provider as PaperProvider } from 'react-native-paper';
+import validatedData from './validated-data';
 import UserTable from './UserTable';
-// import SearchBox from './SearchBox';
-
-const styles = StyleSheet.create({
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 17,
-  },
-  searchBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 50,
-    justifyContent: 'center',
-  },
-
-  searchBar: {
-    flex: 0.75,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 10,
-    borderRadius: '20%',
-  },
-
-  button: {
-    height: 'auto',
-    flex: 0.3,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: '20%',
-  },
-});
-
-const userData = {
-  bananas: PropTypes.number.isRequired,
-  lastDayPlayed: PropTypes.string,
-  longestStreak: PropTypes.number,
-  name: PropTypes.string.isRequired,
-  stars: PropTypes.number,
-  subscribed: PropTypes.bool,
-  uid: PropTypes.string.isRequired,
-};
-
-function validateData(data) {
-  try {
-    Object.values(data).forEach((user) => {
-      PropTypes.checkPropTypes(userData, user, 'property', 'data.json');
-    });
-    return data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-const validatedData = validateData(data);
+import SearchBox from './SearchBox';
+import styles from './styles';
 
 const App = () => {
   const [users, setUsers] = useState([]);
   const [username, setUsername] = useState('');
-
   const searchDone = useRef(false);
 
   const handleSearch = async () => {
     try {
       const usersArray = Object.values(validatedData);
-      let searchedUser;
       const matchingUsers = usersArray.filter(
         (user) => user.name.toLowerCase() === username.toLowerCase().trim()
       );
@@ -90,6 +29,9 @@ const App = () => {
         searchDone.current = false;
         return;
       }
+
+      let searchedUser = matchingUsers[0];
+
       if (matchingUsers.length > 1) {
         searchedUser = await new Promise((resolve) => {
           Alert.alert(
@@ -101,8 +43,6 @@ const App = () => {
             }))
           );
         });
-      } else {
-        searchedUser = matchingUsers[0];
       }
 
       const allUsers = usersArray.sort((a, b) => b.bananas - a.bananas);
@@ -145,18 +85,11 @@ const App = () => {
   return (
     <PaperProvider>
       <SafeAreaView style={styles.centered}>
-        <View style={styles.searchBox}>
-          <Searchbar
-            autoFocus
-            style={styles.searchBar}
-            placeholder='Enter first and last name'
-            onChangeText={setUsername}
-            value={username}
-          />
-          <Button style={styles.button} mode='contained' onPress={handleSearch}>
-            Search
-          </Button>
-        </View>
+        <SearchBox
+          username={username}
+          setUsername={setUsername}
+          handleSearch={handleSearch}
+        />
         <UserTable
           isSearchDone={searchDone.current}
           users={users}
