@@ -1,9 +1,15 @@
+import React from 'react';
 import { DataTable } from 'react-native-paper';
+
+// Importing styles for the component
 import styles from '../styles';
 
 function UserTable({ users, isSearchDone }) {
+  // Rendering the component only if the search is done
   return isSearchDone ? (
+    // DataTable for displaying user information
     <DataTable testID='user-table'>
+      {/* DataTable header with columns */}
       <DataTable.Header style={styles.tableHeader}>
         <DataTable.Title style={{ justifyContent: 'center', flex: 0.4 }}>
           Rank
@@ -19,6 +25,7 @@ function UserTable({ users, isSearchDone }) {
         </DataTable.Title>
       </DataTable.Header>
 
+      {/* Mapping through the users and creating DataTable rows */}
       {users.map((user) => (
         <DataTable.Row
           testID='user-row'
@@ -28,6 +35,7 @@ function UserTable({ users, isSearchDone }) {
           }}
           key={user.uid}
         >
+          {/* DataTable cells for each user attribute */}
           <DataTable.Cell style={{ justifyContent: 'center', flex: 0.4 }}>
             {user.bananas === 0 ? '∞' : user.rank}
           </DataTable.Cell>
@@ -48,7 +56,7 @@ function UserTable({ users, isSearchDone }) {
         </DataTable.Row>
       ))}
     </DataTable>
-  ) : null;
+  ) : null; // Render nothing if the search is not done
 }
 
 export default UserTable;
