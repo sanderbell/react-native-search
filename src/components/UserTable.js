@@ -1,5 +1,5 @@
 import { DataTable } from 'react-native-paper';
-import styles from './styles';
+import styles from '../styles';
 
 function UserTable({ users, isSearchDone }) {
   return isSearchDone ? (

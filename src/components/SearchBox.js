@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Button, Searchbar } from 'react-native-paper';
-import styles from './styles';
+import styles from '../styles';
 
 function SearchBox({ username, setUsername, handleSearch }) {
   return (

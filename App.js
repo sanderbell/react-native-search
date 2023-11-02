@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { Alert, SafeAreaView, Keyboard } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
-import validatedData from './validated-data';
-import UserTable from './UserTable';
-import SearchBox from './SearchBox';
-import styles from './styles';
+import validatedData from './src/validated-data.js';
+import UserTable from './src/components/UserTable';
+import SearchBox from './src/components/SearchBox';
+import styles from './src/styles';
 
 const App = () => {
   const [users, setUsers] = useState([]);
