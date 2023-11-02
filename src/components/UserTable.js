@@ -1,8 +1,7 @@
 import React from 'react';
 import { DataTable } from 'react-native-paper';
 
-function UserTable({ users, isSearchDone }) {
-  // Rendering the component only if the search is done
+function UserTable({ users }) {
   return (
     // DataTable for displaying user information
     <DataTable testID='user-table'>

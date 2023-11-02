@@ -1,7 +1,6 @@
-import { StyleSheet, Platform, StatusBar } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 
 const styles = StyleSheet.create({
-
   centered: {
     flex: 1,
     justifyContent: 'center',
