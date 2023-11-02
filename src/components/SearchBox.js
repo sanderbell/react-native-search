@@ -10,11 +10,13 @@ function SearchBox({ username, setUsername, handleSearch }) {
     <View style={styles.searchBox}>
       {/* Searchbar for user input */}
       <Searchbar
+        autoComplete='off'
         autoFocus
         style={styles.searchBar}
-        placeholder='Enter first and last name'
+        placeholder='Enter full name'
         onChangeText={setUsername}
         value={username}
+        onFocus={() => (setUsername(''))}
       />
       {/* Button for triggering the search */}
       <Button

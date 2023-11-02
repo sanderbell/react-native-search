@@ -8,7 +8,7 @@ describe('SearchBox', () => {
       <SearchBox username='' setUsername={() => {}} handleSearch={() => {}} />
     );
 
-    expect(getByPlaceholderText('Enter first and last name')).toBeTruthy();
+    expect(getByPlaceholderText('Enter full name')).toBeTruthy();
     expect(getByText('Search')).toBeTruthy();
   });
 
@@ -23,7 +23,7 @@ describe('SearchBox', () => {
     );
 
     fireEvent.changeText(
-      getByPlaceholderText('Enter first and last name'),
+      getByPlaceholderText('Enter full name'),
       'Emma Watson'
     );
     expect(setUsername).toHaveBeenCalledWith('Emma Watson');

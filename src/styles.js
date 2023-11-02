@@ -1,11 +1,12 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform, StatusBar } from 'react-native';
 
 const styles = StyleSheet.create({
+
   centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 17,
+    margin: 15,
   },
   searchBox: {
     flexDirection: 'row',
@@ -15,19 +16,19 @@ const styles = StyleSheet.create({
   },
 
   searchBar: {
-    flex: 0.75,
+    flex: Platform.OS === 'ios' ? 0.75 : 0.9,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,
-    borderRadius: '20%',
+    borderRadius: 20,
   },
 
   button: {
     height: 'auto',
-    flex: 0.3,
+    flex: Platform.OS === 'ios' ? 0.3 : 0.1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: '20%',
+    borderRadius: 20,
   },
 });
 

@@ -3,7 +3,7 @@ import { DataTable } from 'react-native-paper';
 
 function UserTable({ users, isSearchDone }) {
   // Rendering the component only if the search is done
-  return isSearchDone ? (
+  return (
     // DataTable for displaying user information
     <DataTable testID='user-table'>
       {/* DataTable header with columns */}
@@ -53,7 +53,7 @@ function UserTable({ users, isSearchDone }) {
         </DataTable.Row>
       ))}
     </DataTable>
-  ) : null; // Render nothing if the search is not done
+  ) 
 }
 
 export default UserTable;

@@ -1,5 +1,10 @@
 import React, { useState, useRef } from 'react';
-import { Alert, SafeAreaView, Keyboard } from 'react-native';
+import {
+  Alert,
+  SafeAreaView,
+  Keyboard,
+  KeyboardAvoidingView,
+} from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 
 // Importing external data source
@@ -86,6 +91,11 @@ const App = () => {
 
         // Marking the search as done and dismissing the keyboard
         searchDone.current = true;
+        setTimeout(() => {
+          {
+            searchDone.current = false;
+          }
+        }, 1000);
         Keyboard.dismiss();
       }
     } catch (error) {
@@ -103,11 +113,13 @@ const App = () => {
           setUsername={setUsername}
           handleSearch={handleSearch}
         />
-        <UserTable
-          isSearchDone={searchDone.current}
-          users={users}
-          styles={styles}
-        />
+        {(username.length > 0) & searchDone.current ? (
+          <UserTable
+            isSearchDone={searchDone.current}
+            users={users}
+            styles={styles}
+          />
+        ) : null}
       </SafeAreaView>
     </PaperProvider>
   );
