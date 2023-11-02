@@ -1,16 +1,13 @@
 import React from 'react';
 import { DataTable } from 'react-native-paper';
 
-// Importing styles for the component
-import styles from '../styles';
-
 function UserTable({ users, isSearchDone }) {
   // Rendering the component only if the search is done
   return isSearchDone ? (
     // DataTable for displaying user information
     <DataTable testID='user-table'>
       {/* DataTable header with columns */}
-      <DataTable.Header style={styles.tableHeader}>
+      <DataTable.Header style={{ marginBottom: 5 }}>
         <DataTable.Title style={{ justifyContent: 'center', flex: 0.4 }}>
           Rank
         </DataTable.Title>

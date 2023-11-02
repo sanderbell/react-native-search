@@ -24,16 +24,16 @@ describe('SearchBox', () => {
 
     fireEvent.changeText(
       getByPlaceholderText('Enter first and last name'),
-      'John Doe'
+      'Emma Watson'
     );
-    expect(setUsername).toHaveBeenCalledWith('John Doe');
+    expect(setUsername).toHaveBeenCalledWith('Emma Watson');
   });
 
   it('calls handleSearch when the search button is pressed', () => {
     const handleSearch = jest.fn();
     const { getByText } = render(
       <SearchBox
-        username='John Doe'
+        username='Emma Watson'
         setUsername={() => {}}
         handleSearch={handleSearch}
       />

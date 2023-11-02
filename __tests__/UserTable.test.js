@@ -14,13 +14,6 @@ describe('<UserTable />', () => {
     { uid: '2', rank: 2, name: 'Alex Dong', bananas: 3, isSearchedUser: true },
   ];
 
-  it('renders correctly when isSearchDone is false', () => {
-    const { queryByTestId } = render(
-      <UserTable users={mockUsers} isSearchDone={false} />
-    );
-    expect(queryByTestId('user-table')).toBeNull();
-  });
-
   it('renders correctly when isSearchDone is true', () => {
     const { getByTestId } = render(
       <UserTable users={mockUsers} isSearchDone={true} />

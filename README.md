@@ -1,5 +1,7 @@
 # User Search Component
 
+![Demo GIF](./assets/demo.gif)
+
 This React Native app allows users to search for individuals based on their first and last names and displays relevant information about them. The app is built using Expo and utilizes components from the `react-native-paper` library for a clean and responsive user interface.
 
 ## App Structure
