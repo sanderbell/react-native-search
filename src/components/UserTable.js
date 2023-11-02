@@ -3,7 +3,7 @@ import styles from '../styles';
 
 function UserTable({ users, isSearchDone }) {
   return isSearchDone ? (
-    <DataTable>
+    <DataTable testID='user-table'>
       <DataTable.Header style={styles.tableHeader}>
         <DataTable.Title style={{ justifyContent: 'center', flex: 0.4 }}>
           Rank
@@ -21,6 +21,7 @@ function UserTable({ users, isSearchDone }) {
 
       {users.map((user) => (
         <DataTable.Row
+          testID='user-row'
           style={{
             borderRadius: 15,
             backgroundColor: user.isSearchedUser ? '#ede7f3' : 'transparent',
