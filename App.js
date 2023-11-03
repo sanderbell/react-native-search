@@ -86,12 +86,14 @@ const App = () => {
 
         // Marking the search as done and dismissing the keyboard
         searchDone.current = true;
+        Keyboard.dismiss();
+        
+        // Marking the search as undone so that the table won't be shown when a new search is initialized
         setTimeout(() => {
           {
             searchDone.current = false;
           }
         }, 1000);
-        Keyboard.dismiss();
       }
     } catch (error) {
       // Handling errors during the search process
