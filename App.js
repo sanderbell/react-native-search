@@ -32,7 +32,6 @@ const App = () => {
       // Handling the scenario where no users match the search
       if (matchingUsers.length === 0) {
         Alert.alert('🙊 No such user', 'Enter their first and last name');
-        setUsers([]);
         searchDone.current = false;
         return;
       }
