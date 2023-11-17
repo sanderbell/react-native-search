@@ -6,12 +6,12 @@ const dataTypes = {
   lastDayPlayed: PropTypes.string,
   longestStreak: PropTypes.number,
   name: PropTypes.string.isRequired,
-  stars: PropTypes.number,
+  stars: PropTypes.number.isRequired,
   subscribed: PropTypes.bool,
   uid: PropTypes.string.isRequired,
 };
 
-function validateData(data) {
+function validate(data) {
   try {
     Object.values(data).forEach((user) => {
       PropTypes.checkPropTypes(dataTypes, user, 'property', 'data.json');
@@ -23,6 +23,6 @@ function validateData(data) {
   }
 }
 
-const validatedData = validateData(data);
+const validatedData = validate(data);
 
 export default validatedData;
