@@ -53,10 +53,10 @@ const App = () => {
         });
       }
 
-      // Sorting all users by the number of bananas
-      const allUsers = usersArray.sort((a, b) => b.bananas - a.bananas);
-
       if (searchedUser) {
+        // Sorting all users by the number of bananas
+        const allUsers = usersArray.sort((a, b) => b.bananas - a.bananas);
+
         // Determining the rank of the searched user
         const userRank =
           allUsers.findIndex((user) => user.uid === searchedUser.uid) + 1;
@@ -87,7 +87,7 @@ const App = () => {
         // Marking the search as done and dismissing the keyboard
         searchDone.current = true;
         Keyboard.dismiss();
-        
+
         // Marking the search as undone so that the table won't be shown when a new search is initialized
         setTimeout(() => {
           {
