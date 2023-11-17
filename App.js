@@ -26,7 +26,7 @@ const App = () => {
 
       // Filtering users based on the provided username
       const matchingUsers = usersArray.filter(
-        (user) => user.name.toLowerCase() === username.toLowerCase().trim()
+        (user) => user.name.toLowerCase().trim() === username.toLowerCase().trim()
       );
 
       // Handling the scenario where no users match the search

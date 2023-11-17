@@ -16,7 +16,7 @@ function SearchBox({ username, setUsername, handleSearch }) {
         placeholder='Enter full name'
         onChangeText={setUsername}
         value={username}
-        onFocus={() => (setUsername(''))}
+        onFocus={() => (username.length > 0 ? username : setUsername(''))}
       />
       {/* Button for triggering the search */}
       <Button
